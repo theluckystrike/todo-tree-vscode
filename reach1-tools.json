@@ -1,0 +1,7 @@
+{
+  "triesKey": "zovoTodo.proTrial",
+  "tools": [
+    { "id": "report", "title": "Export TODO report", "command": "zovoTodo.exportReport", "extensions": [".js", ".ts", ".tsx", ".py", ".go", ".java"] },
+    { "id": "stale", "title": "Find stale TODOs", "command": "zovoTodo.staleTodos", "extensions": [".js", ".ts", ".tsx", ".py", ".go", ".java"] }
+  ]
+}

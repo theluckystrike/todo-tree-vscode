@@ -1,0 +1,453 @@
+{
+  "name": "zovo-todo-tree",
+  "displayName": "TODO Tree & FIXME Highlighter",
+  "description": "TODO tree and FIXME highlighter for VS Code: highlight TODO, FIXME, BUG, HACK and NOTE comments in any language and list them in a tree by folder, file or tag. Built-in scanner, no ripgrep and no setup.",
+  "version": "0.1.0",
+  "publisher": "zovo",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1B2A4A",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/todo-tree-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/theluckystrike/todo-tree-vscode/issues"
+  },
+  "homepage": "https://github.com/theluckystrike/todo-tree-vscode#readme",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "todo tree",
+    "todo highlight",
+    "fixme",
+    "todo list",
+    "comments"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "Highlights work in every editor. The workspace tree needs folders on disk."
+    },
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "zovoTodo",
+          "title": "TODO Tree",
+          "icon": "media/tree.svg"
+        }
+      ]
+    },
+    "views": {
+      "zovoTodo": [
+        {
+          "id": "zovoTodo.tags",
+          "name": "Tags",
+          "icon": "media/tree.svg",
+          "contextualTitle": "TODO Tree"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "zovoTodo.tags",
+        "contents": "No TODO, FIXME, BUG, HACK, XXX or NOTE comments found in this workspace.\n[Rescan](command:zovoTodo.refresh)\nTags, colors and excluded folders are in the [settings](command:workbench.action.openSettings?%5B%22zovoTodo%22%5D).",
+        "when": "workbenchState != empty"
+      },
+      {
+        "view": "zovoTodo.tags",
+        "contents": "Open a folder to list the TODO comments of its files. Highlights work in any open file.\n[Open Folder](command:workbench.action.files.openFolder)",
+        "when": "workbenchState == empty"
+      }
+    ],
+    "commands": [
+      {
+        "command": "zovoTodo.refresh",
+        "title": "Rescan Workspace",
+        "category": "TODO Tree",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "zovoTodo.groupBy",
+        "title": "Group by Folder, File or Tag",
+        "category": "TODO Tree",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "zovoTodo.filter",
+        "title": "Filter",
+        "category": "TODO Tree",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "zovoTodo.clearFilter",
+        "title": "Clear Filter",
+        "category": "TODO Tree",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "zovoTodo.showTree",
+        "title": "Show the Tree",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.copyText",
+        "title": "Copy Text",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.exportReport",
+        "title": "Export TODO Report (Pro)",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.branchDelta",
+        "title": "TODOs Changed on This Branch (Pro)",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.staleTodos",
+        "title": "Find Stale TODOs (Pro)",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.supportDeveloper",
+        "title": "Support the developer",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.moreViewers",
+        "title": "More free tools",
+        "category": "TODO Tree"
+      },
+      {
+        "command": "zovoTodo.getPro",
+        "title": "Get Zovo Pro (USD 19 once, all 22 Zovo extensions)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoTodo.payWithPayPal",
+        "title": "Pay for Zovo Pro with PayPal (USD 19, team of 5 USD 59)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoTodo.unlockWithSponsors",
+        "title": "I already paid: unlock with GitHub Sponsors",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoTodo.enterLicenseKey",
+        "title": "Enter Zovo Pro license key",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoTodo.removeLicense",
+        "title": "Remove Zovo Pro from this editor",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoTodo.payByCard",
+        "title": "Pay for Zovo Pro by card (USD 19)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoTodo.zovoPro.report",
+        "title": "Zovo Pro: Export TODO report"
+      },
+      {
+        "command": "zovoTodo.zovoPro.stale",
+        "title": "Zovo Pro: Find stale TODOs"
+      },
+      {
+        "command": "zovoTodo.zovoPro.delta",
+        "title": "Zovo Pro: TODOs changed on this branch"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "zovoTodo.refresh",
+          "when": "view == zovoTodo.tags",
+          "group": "navigation@1"
+        },
+        {
+          "command": "zovoTodo.filter",
+          "when": "view == zovoTodo.tags && !zovoTodo.filtered",
+          "group": "navigation@2"
+        },
+        {
+          "command": "zovoTodo.clearFilter",
+          "when": "view == zovoTodo.tags && zovoTodo.filtered",
+          "group": "navigation@2"
+        },
+        {
+          "command": "zovoTodo.groupBy",
+          "when": "view == zovoTodo.tags",
+          "group": "navigation@3"
+        },
+        {
+          "command": "zovoTodo.exportReport",
+          "when": "view == zovoTodo.tags && config.zovoTodo.showProTools",
+          "group": "2_pro@1"
+        },
+        {
+          "command": "zovoTodo.branchDelta",
+          "when": "view == zovoTodo.tags && config.zovoTodo.showProTools",
+          "group": "2_pro@2"
+        },
+        {
+          "command": "zovoTodo.staleTodos",
+          "when": "view == zovoTodo.tags && config.zovoTodo.showProTools",
+          "group": "2_pro@3"
+        },
+        {
+          "command": "zovoTodo.moreViewers",
+          "when": "view == zovoTodo.tags && config.zovoTodo.showSupportLinks",
+          "group": "3_more@1"
+        },
+        {
+          "command": "zovoTodo.supportDeveloper",
+          "when": "view == zovoTodo.tags && config.zovoTodo.showSupportLinks",
+          "group": "3_more@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "zovoTodo.copyText",
+          "when": "view == zovoTodo.tags && viewItem == zovoTodoItem",
+          "group": "1_copy@1"
+        },
+        {
+          "command": "zovoTodo.exportReport",
+          "when": "view == zovoTodo.tags && viewItem =~ /zovoTodo(File|Dir)/ && config.zovoTodo.showProTools",
+          "group": "2_pro@1"
+        },
+        {
+          "command": "zovoTodo.staleTodos",
+          "when": "view == zovoTodo.tags && viewItem =~ /zovoTodo(File|Dir)/ && config.zovoTodo.showProTools",
+          "group": "2_pro@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "zovoTodo.zovoPro.report",
+          "when": "!explorerResourceIsFolder && resourceFilename =~ /\\.(js|jsx|ts|tsx|py|go|java|cs|rb|php|rs|c|cpp|h|kt|swift)$/i && config.zovoTodo.showProTools",
+          "group": "zovoPro@1"
+        },
+        {
+          "command": "zovoTodo.zovoPro.stale",
+          "when": "!explorerResourceIsFolder && resourceFilename =~ /\\.(js|jsx|ts|tsx|py|go|java|cs|rb|php|rs|c|cpp|h|kt|swift)$/i && config.zovoTodo.showProTools",
+          "group": "zovoPro@1"
+        },
+        {
+          "command": "zovoTodo.zovoPro.delta",
+          "when": "!explorerResourceIsFolder && resourceFilename =~ /\\.(js|jsx|ts|tsx|py|go|java|cs|rb|php|rs|c|cpp|h|kt|swift)$/i && config.zovoTodo.showProTools",
+          "group": "zovoPro@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "zovoTodo.copyText",
+          "when": "false"
+        },
+        {
+          "command": "zovoTodo.clearFilter",
+          "when": "zovoTodo.filtered"
+        },
+        {
+          "command": "zovoTodo.zovoPro.report",
+          "when": "false"
+        },
+        {
+          "command": "zovoTodo.zovoPro.stale",
+          "when": "false"
+        },
+        {
+          "command": "zovoTodo.zovoPro.delta",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "TODO Tree & FIXME Highlighter",
+      "properties": {
+        "zovoTodo.tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "TODO",
+            "FIXME",
+            "BUG",
+            "HACK",
+            "XXX",
+            "NOTE"
+          ],
+          "description": "The tags to highlight and list. A tag counts inside a comment (or at the start of a line in Markdown and text files)."
+        },
+        "zovoTodo.tagColors": {
+          "type": "object",
+          "default": {},
+          "markdownDescription": "Colors per tag, for example `{ \"TODO\": { \"background\": \"#f5c518\", \"foreground\": \"#1e1e1e\" }, \"REVIEW\": { \"background\": \"#3fb950\" } }`. Tags without an entry keep the built-in colors."
+        },
+        "zovoTodo.highlight": {
+          "type": "string",
+          "enum": [
+            "text",
+            "tag",
+            "line",
+            "none"
+          ],
+          "enumDescriptions": [
+            "The tag in full color and the rest of the comment tinted",
+            "Only the tag",
+            "The whole line tinted, with a bar on the left",
+            "No highlight (the tree still lists the tags)"
+          ],
+          "default": "text",
+          "description": "How tags look in the editor."
+        },
+        "zovoTodo.caseSensitive": {
+          "type": "boolean",
+          "default": true,
+          "description": "Match tags in capitals only (TODO, not todo)."
+        },
+        "zovoTodo.commentsOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Count tags only inside comments. Turn off to count them anywhere in a line."
+        },
+        "zovoTodo.groupBy": {
+          "type": "string",
+          "enum": [
+            "folder",
+            "file",
+            "tag"
+          ],
+          "default": "folder",
+          "description": "How the tree groups the tags."
+        },
+        "zovoTodo.expanded": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the tree with every group expanded."
+        },
+        "zovoTodo.useGitignore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Skip files that .gitignore lists."
+        },
+        "zovoTodo.useFilesExclude": {
+          "type": "boolean",
+          "default": true,
+          "description": "Skip files that the files.exclude setting hides."
+        },
+        "zovoTodo.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "dist",
+            "out",
+            "build",
+            "coverage",
+            "vendor",
+            ".next",
+            "*.min.*"
+          ],
+          "description": "More glob patterns to skip. A pattern without a slash matches a file or folder name at any depth."
+        },
+        "zovoTodo.maxFiles": {
+          "type": "number",
+          "default": 20000,
+          "minimum": 100,
+          "description": "Stop the workspace scan after this many files."
+        },
+        "zovoTodo.maxFileSizeKB": {
+          "type": "number",
+          "default": 512,
+          "minimum": 1,
+          "description": "Files larger than this are not scanned."
+        },
+        "zovoTodo.scanOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan the workspace when VS Code starts. When off, click Rescan in the tree."
+        },
+        "zovoTodo.statusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the tag count in the status bar."
+        },
+        "zovoTodo.maxHighlightLines": {
+          "type": "number",
+          "default": 50000,
+          "minimum": 1000,
+          "description": "Files with more lines than this are not highlighted."
+        },
+        "zovoTodo.baseBranch": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Branch for \"TODOs Changed on This Branch\" (Pro). Empty: origin/main, main, origin/master, master or develop, the first that exists."
+        },
+        "zovoTodo.staleDays": {
+          "type": "number",
+          "default": 90,
+          "minimum": 0,
+          "markdownDescription": "Age in days from which \"Find Stale TODOs\" (Pro) lists a tag."
+        },
+        "zovoTodo.reportBlame": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Add the git author and date of each line to \"Export TODO Report\" (Pro)."
+        },
+        "zovoTodo.maxBlameFiles": {
+          "type": "number",
+          "default": 400,
+          "minimum": 1,
+          "description": "Pro tools read git blame for at most this many files."
+        },
+        "zovoTodo.showProTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Zovo Pro tools in the tree menu and the Explorer menu. Everything free stays visible."
+        },
+        "zovoTodo.askForRating": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask once for a Marketplace rating after the extension has been useful on two occasions at least 30 minutes apart. Never on startup, never after an error. Nothing is sent anywhere."
+        },
+        "zovoTodo.showSupportLinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show More free tools and Support the developer in the tree menu."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node scripts/test.js"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/theluckystrike/sponsorships?tier_id=679878"
+  }
+}
